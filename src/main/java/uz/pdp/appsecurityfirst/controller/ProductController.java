@@ -17,16 +17,19 @@ public class ProductController {
     @Autowired
     ProductRepository productRepository;
 
+    //Manager, Director
     @GetMapping
     public HttpEntity<?> getProduct(){
         return ResponseEntity.ok(productRepository.findAll());
     }
 
+    //Director
     @PostMapping
     public HttpEntity<?> addProduct(@RequestBody Product product){
         return ResponseEntity.ok(productRepository.save(product));
     }
 
+    //Director
     @PutMapping("/{id}")
     public HttpEntity<?> editProduct(@PathVariable Integer id,@RequestBody Product product){
         Optional<Product> optionalProduct = productRepository.findById(id);
@@ -39,12 +42,14 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
+    //Director
     @DeleteMapping("/{id}")
     public HttpEntity<?> deleteProduct(@PathVariable Integer id){
         productRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
+    //Manager, Director,User
     @GetMapping("/{id}")
     public HttpEntity<?> getProduct(@PathVariable Integer id){
         Optional<Product> optionalProduct = productRepository.findById(id);
