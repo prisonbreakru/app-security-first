@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
@@ -19,9 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("director").password(passwordEncoder().encode("director")).roles("DIRECTOR")
+                .withUser("director1").password(passwordEncoder().encode("director1")).roles("DIRECTOR").authorities("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","DELETE_PRODUCT","READ_ONE_PRODUCT")
                 .and()
-                .withUser("manager").password(passwordEncoder().encode("manager")).roles("MANAGER")
+                .withUser("director2").password(passwordEncoder().encode("director2")).roles("DIRECTOR").authorities("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
                 .and()
                 .withUser("user").password(passwordEncoder().encode("user")).roles("USER");
 
@@ -33,9 +35,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/api/product/*").hasRole("USER")
-                .antMatchers(HttpMethod.GET,"/api/product/**").hasAnyRole("MANAGER","DIRECTOR")
-                .antMatchers("/api/product/**").hasRole("DIRECTOR")
+                .antMatchers(HttpMethod.DELETE,"/api/product/*").hasAuthority("DELETE_PRODUCT")
+                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
+                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","DELETE_PRODUCT","READ_ONE_PRODUCT")
                 .anyRequest()
                 .authenticated()
                 .and()
