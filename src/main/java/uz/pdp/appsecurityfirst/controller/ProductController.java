@@ -4,6 +4,7 @@ package uz.pdp.appsecurityfirst.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.appsecurityfirst.entity.Product;
 import uz.pdp.appsecurityfirst.repository.ProductRepository;
@@ -18,18 +19,21 @@ public class ProductController {
     ProductRepository productRepository;
 
     //Manager, Director
+//    @PreAuthorize(value = "hasRole('DIRECTOR')")
     @GetMapping
     public HttpEntity<?> getProduct(){
         return ResponseEntity.ok(productRepository.findAll());
     }
 
     //Director
+//    @PreAuthorize(value = "hasRole('DIRECTOR')")
     @PostMapping
     public HttpEntity<?> addProduct(@RequestBody Product product){
         return ResponseEntity.ok(productRepository.save(product));
     }
 
     //Director
+//    @PreAuthorize(value = "hasRole('DIRECTOR')")
     @PutMapping("/{id}")
     public HttpEntity<?> editProduct(@PathVariable Integer id,@RequestBody Product product){
         Optional<Product> optionalProduct = productRepository.findById(id);
@@ -43,6 +47,7 @@ public class ProductController {
     }
 
     //Director
+//    @PreAuthorize(value = "hasRole('DIRECTOR')")
     @DeleteMapping("/{id}")
     public HttpEntity<?> deleteProduct(@PathVariable Integer id){
         productRepository.deleteById(id);
@@ -50,6 +55,7 @@ public class ProductController {
     }
 
     //Manager, Director,User
+//    @PreAuthorize(value = "hasRole('DIRECTOR')")
     @GetMapping("/{id}")
     public HttpEntity<?> getProduct(@PathVariable Integer id){
         Optional<Product> optionalProduct = productRepository.findById(id);
