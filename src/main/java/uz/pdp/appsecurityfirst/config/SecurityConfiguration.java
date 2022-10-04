@@ -35,9 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.DELETE,"/api/product/*").hasAuthority("DELETE_PRODUCT")
-                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
-                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","DELETE_PRODUCT","READ_ONE_PRODUCT")
+//                .antMatchers(HttpMethod.DELETE,"/api/product/*").hasAuthority("DELETE_PRODUCT")
+//                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL_PRODUCT","ADD_PRODUCT","EDIT_PRODUCT","READ_ONE_PRODUCT")
                 .anyRequest()
                 .authenticated()
                 .and()
